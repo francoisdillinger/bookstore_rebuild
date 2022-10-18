@@ -1,0 +1,11 @@
+# These are the required packages to run this project
+# As we use more packages this list will be updated
+Flask==2.0.3
+Flask_SQLAlchemy==2.5.1
+# setuptools==62.6.0
+Werkzeug==2.0.3
+# WTForms==3.0.1
+# Pillow==9.2.0
+psycopg2-binary
+flask_cors
+python-dotenv
