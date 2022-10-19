@@ -1,48 +1,35 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-
+from .database import check_and_create_database
+import redis
+from flask_session import Session
 
 db = SQLAlchemy()
+server_session = Session()
 
 def create_app():
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'this_was_a_major_pain'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://admin:password@localhost/bookstore_rebuild'
+    app.config['SQLALCHEMY_ECHO'] = True
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SESSION_TYPE'] = 'redis'
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_USE_SIGNER'] = True
+    app.config['SESSION_REDIS'] = redis.from_url('redis://127.0.0.1:6379')
 
-    db.init_app(app)
 
     from .routes.register import register
+    from .routes.login import login
+    
     app.register_blueprint(register)
+    app.register_blueprint(login)
+
+    
+    server_session.init_app(app)
+    db.init_app(app=app)
+    check_and_create_database(app, db)
 
     return app
-
-# class User(db.Model):
-#     __tablename__ = 'Users'
-#     id = db.Column(db.Integer, primary_key=True)
-#     first_name = db.Column(db.String(200), nullable=False, unique=False)
-#     last_name = db.Column(db.String(200), nullable=False, unique=False)
-#     email = db.Column(db.String(150), nullable=False, unique=True)
-#     password = db.Column(db.String(150), nullable =False, unique=False)
-
-# db.create_all()
-# def create_DB(app, User, Book):
-#     with app.app_context():
-#         if not path.exists('bookstore/' + DB_NAME):
-#             db.create_all(app=app)
-#             add_admin_user_to_db(User)
-#             # add_initial_book_data(Book)
-
-# def add_admin_user_to_db(User):
-#     print('Creating user: Admin')
-#     user = User(
-#         first_name='admin', 
-#         last_name='admin', 
-#         email='admin1@gmail.com', 
-#         password=generate_password_hash('1234567', method='sha256'), 
-#         admin_status=True
-#     )
-    
-#     db.session.add(user)
-#     db.session.commit()
 
