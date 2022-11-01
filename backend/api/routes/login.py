@@ -26,7 +26,7 @@ def log_in():
 def logged_in():
     user_id = session.get('user_id')
     if not user_id:
-        return {"error": "User not logged in."}
+        return {"error": "User not logged in."}, 401
     else:
         user = User.query.filter_by(id=user_id).first()
         return jsonify({
