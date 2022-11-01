@@ -12,7 +12,8 @@ class User(db.Model):
 
 class Book(db.Model):
     __tablename__ = 'Book'
-    isbn = db.Column(db.Integer, primary_key=True, unique=True)
+    # Had to use BIGINT in postgres as ISBN's are too large for Integer
+    isbn = db.Column(db.BIGINT, primary_key=True, unique=True)
     author = db.Column(db.String(128), nullable=False, unique=False)
     title = db.Column(db.String(256), nullable=False, unique=False)
     price = db.Column(db.Float, nullable=False, unique=False)
