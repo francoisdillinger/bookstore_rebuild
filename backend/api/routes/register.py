@@ -11,7 +11,7 @@ def format_data(user):
         "last_name": user.last_name,
         "email": user.email,
         "password": user.password
-    }), 200
+    }), 201
 
 @register.route('/register', methods=['POST'])
 def users():
@@ -38,6 +38,8 @@ def users():
     else:
         password1 = generate_password_hash(request.json['password1'], method="sha256")
         user = User(first_name = first_name, last_name = last_name, email = email, password = password1)
+        # The following line is used to create an Admin
+        # user = User(first_name = first_name, last_name = last_name, email = email, password = password1, admin_status = True)
         db.session.add(user)
         db.session.commit()
         print(f'User with following data: {first_name}, {last_name}, {email}, {password1}')
