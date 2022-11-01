@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils.functions import database_exists, create_database
+from .book_data.books import books
 
 
 def check_and_create_database(application, database):
@@ -16,3 +17,21 @@ def check_and_create_database(application, database):
             # database.init_app(application)
             database.create_all()
             database.session.commit()
+            add_initial_book_data(Book, database)
+
+
+def add_initial_book_data(Book, db):
+    print('Creating initial book data.')
+    for book in books:
+        new_book = Book(
+            isbn = book['isbn'],
+            author = book['author'],
+            title = book['title'],
+            price = book['price'],
+            stock_quantity = book['stock_quantity'],
+            description = book['description'],
+            category = book['category'],
+            image_file = book['image_file'],
+        )
+        db.session.add(new_book)
+        db.session.commit()
