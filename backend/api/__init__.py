@@ -22,10 +22,11 @@ def create_app():
 
     from .routes.register import register
     from .routes.login import login
+    from .routes.books import books
     
     app.register_blueprint(register)
     app.register_blueprint(login)
-
+    app.register_blueprint(books)
     
     server_session.init_app(app)
     db.init_app(app=app)
