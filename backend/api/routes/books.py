@@ -61,9 +61,9 @@ def create_book():
             else:
                 return {"error":"This book already exists."}, 409
         else:
-            return {"error":"User is not Authorized"}, 401    
+            return {"error":"User is not Authorized"}, 403    
     else:
-        return {"error": "User not logged in."}
+        return {"error": "User not logged in."}, 401
 
 def check_admin_status(user_id):
     user = User.query.filter_by(id=user_id).first()
