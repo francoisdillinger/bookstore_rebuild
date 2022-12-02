@@ -16,7 +16,7 @@ def log_in():
     if user_exists:
         if check_password_hash(user_exists.password, password):
             session["user_id"] = user_exists.id
-            return {"success":"Successfully logged in."}
+            return {"success":"Successfully logged in."}, 200
         else:
             return {"error": "Please try logging in again."}, 401
     return {"error":"Please try again."}, 401
